@@ -40,7 +40,7 @@ public class Items {
         return itemPrices;
     }
 
-    private static Map<String,Integer> getNumeralsMap(){
+    public static Map<String,Integer> getNumeralsMap(){
         Map<String, Integer> numeralMap = new HashMap<>();
 
         numeralMap.put("million", 6);

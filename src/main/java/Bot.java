@@ -21,29 +21,32 @@ public class Bot {
         Locator bigCookie = page.locator("css=#bigCookie");
         Locator cookiesAmount = page.locator("css=#cookies");
 
-
-        List<BigInteger> itemPrices = Items.getItems(page.locator("css=.price"));
-
-        System.out.println(itemPrices);
-
         BigInteger currentCookiesAmount;
+        Locator itemToBuy;
+        Locator upgrade = page.locator("#upgrade0");
+
+        BigInteger cheapestUpgrade = new BigInteger("100");
 
         while (true){
             bigCookie.click();
+            List<BigInteger> itemPrices = Items.getItems(page.locator("css=.price"));
             currentCookiesAmount = new BigInteger(cookiesAmount.innerText().split(" ")[0].replace(",", ""));
 
             for(int i = 0; i < itemPrices.size();i++){
-                if(itemPrices.get(i).compareTo(currentCookiesAmount) < 0){
 
+                if(itemPrices.get(i).compareTo(currentCookiesAmount) < 0){
+                    itemToBuy = page.locator("css=#product" + i);
+                    itemToBuy.click();
+                    break;
                 }
             }
-
+            if(currentCookiesAmount.compareTo(cheapestUpgrade) >= 0){
+                upgrade.click();
+                upgrade.hover();
+                cheapestUpgrade = Upgrade.getpriceOfCheapestItem(page.locator("div#tooltipCrate>div:nth-of-type(2)>span"));
+            }
+            System.out.println(cheapestUpgrade);
         }
-
-        //page.close();
-        //launch.close();
-        //playwright.close();
-
     }
     public static void consent(Page page){
         page.getByLabel("Consent", new Page.GetByLabelOptions().setExact(true)).click();
