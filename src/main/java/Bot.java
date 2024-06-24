@@ -40,11 +40,12 @@ public class Bot {
                     break;
                 }
             }
-            if(currentCookiesAmount.compareTo(cheapestUpgrade) == 0){
+            if(currentCookiesAmount.compareTo(cheapestUpgrade) >= 0){
                 upgrade.click();
                 upgrade.hover();
                 cheapestUpgrade = Upgrade.getpriceOfCheapestItem(page.locator("div#tooltipCrate>div:nth-of-type(2)>span"));
             }
+            System.out.println(cheapestUpgrade);
         }
     }
     public static void consent(Page page){
