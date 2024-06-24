@@ -45,6 +45,36 @@ public class Bot {
     public static List<BigInteger> getItems(Page page){
         Locator items = page.locator("css=.price");
         List<BigInteger> itemPrices = new ArrayList<>();
+        Map<String, Integer> numeralsMap = getNumeralsMap();
+
+        String tempValue;
+
+
+        for (int i = 0; i < items.count();i++){
+            tempValue = items.nth(i).innerText().replace(",","");
+
+            List<String> temp = List.of(tempValue.split(" "));
+
+            if(temp.size() == 1){
+                itemPrices.add(new BigInteger(temp.get(0)));
+            }
+            else{
+                int magnitude = numeralsMap.get(temp.get(1));
+                if (temp.get(0).contains(".")){
+                    magnitude--;
+                    String value = temp.get(0).replace(".","");
+                    String magnitudeString = "0".repeat(magnitude);
+
+                    itemPrices.add(new BigInteger(value + magnitudeString));
+                }
+            }
+
+        }
+
+        return itemPrices;
+    }
+
+    public static Map<String,Integer> getNumeralsMap(){
         Map<String, Integer> numeralMap = new HashMap<>();
 
         numeralMap.put("million", 6);
@@ -58,29 +88,6 @@ public class Bot {
         numeralMap.put("nonillion", 30);
         numeralMap.put("decillion", 33);
 
-        String tempValue;
-        for (int i = 0; i < items.count();i++){
-            tempValue = items.nth(i).innerText().replace(",","");
-
-            List<String> temp = List.of(tempValue.split(" "));
-
-            if(temp.size() == 1){
-                itemPrices.add(new BigInteger(temp.get(0)));
-            }
-            else{
-                int magnitude = numeralMap.get(temp.get(1));
-                if (temp.get(0).contains(".")){
-                    magnitude--;
-                    String value = temp.get(0).replace(".","");
-                    String magnitudeString = "0".repeat(magnitude);
-
-                    itemPrices.add(new BigInteger(value + magnitudeString));
-                }
-            }
-
-        }
-        System.out.println(Arrays.toString(itemPrices.toArray()));
-
-        return itemPrices;
+        return numeralMap;
     }
 }
