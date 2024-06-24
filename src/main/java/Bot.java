@@ -22,19 +22,23 @@ public class Bot {
         Locator cookiesAmount = page.locator("css=#cookies");
 
 
-        List<BigInteger> itemPrices = Items.getItems(page.locator("css=.price"));
-
-        System.out.println(itemPrices);
 
         BigInteger currentCookiesAmount;
+        Locator itemToBuy;
+        BigInteger cheapestUpgrade = new BigInteger("100");
 
         while (true){
             bigCookie.click();
+            List<BigInteger> itemPrices = Items.getItems(page.locator("css=.price"));
             currentCookiesAmount = new BigInteger(cookiesAmount.innerText().split(" ")[0].replace(",", ""));
 
-            for(int i = 0; i < itemPrices.size();i++){
-                if(itemPrices.get(i).compareTo(currentCookiesAmount) < 0){
 
+            for(int i = 0; i < itemPrices.size();i++){
+
+                if(itemPrices.get(i).compareTo(currentCookiesAmount) < 0){
+                    itemToBuy = page.locator("css=#product" + i);
+                    itemToBuy.click();
+                    break;
                 }
             }
 
