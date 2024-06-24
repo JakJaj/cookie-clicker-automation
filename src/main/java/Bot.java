@@ -23,12 +23,19 @@ public class Bot {
 
         List<BigInteger> itemPrices = getItems(page);
 
+        System.out.println(itemPrices);
+
         BigInteger currentCookiesAmount;
 
         while (true){
             bigCookie.click();
             currentCookiesAmount = new BigInteger(cookiesAmount.innerText().split(" ")[0].replace(",", ""));
 
+            for(int i = 0; i < itemPrices.size();i++){
+                if(itemPrices.get(i).compareTo(currentCookiesAmount) < 0){
+
+                }
+            }
 
         }
 
@@ -49,26 +56,26 @@ public class Bot {
 
         String tempValue;
 
-
         for (int i = 0; i < items.count();i++){
             tempValue = items.nth(i).innerText().replace(",","");
-
-            List<String> temp = List.of(tempValue.split(" "));
+            List<String> temp = new ArrayList<>(List.of(tempValue.split(" ")));
 
             if(temp.size() == 1){
                 itemPrices.add(new BigInteger(temp.get(0)));
             }
             else{
                 int magnitude = numeralsMap.get(temp.get(1));
-                if (temp.get(0).contains(".")){
+                String value = temp.get(0);
+                String magnitudeString;
+                if (value.contains(".")){
                     magnitude--;
-                    String value = temp.get(0).replace(".","");
-                    String magnitudeString = "0".repeat(magnitude);
-
-                    itemPrices.add(new BigInteger(value + magnitudeString));
+                    value = value.replace(".","");
                 }
-            }
 
+                magnitudeString = "0".repeat(magnitude);
+                itemPrices.add(new BigInteger(value + magnitudeString));
+
+            }
         }
 
         return itemPrices;
@@ -90,4 +97,5 @@ public class Bot {
 
         return numeralMap;
     }
+
 }
